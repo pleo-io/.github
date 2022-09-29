@@ -1,2 +1,3 @@
-# .github
-The README for pleo-io
+# `pleo-io`'s `.github`
+
+The `README` for `pleo-io`.
