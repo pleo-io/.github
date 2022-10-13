@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://app.opslevel.com/public/opslevel.schema.yml
+---
+version: 1
+service:
+
+  # The name of your repository.
+  name: Github Configuration (pleo-io)
+
+  # The state of the code within the repository.
+  lifecycle: generally_available
+
+  # The lower-case top-level name of your github team name, 
+  # not <team>-backend/frontend. 
+  # If the team name contains spaces, replace these with hyphens/dashes.
+  # This field should be set to the team who stewards the repository.
+  owner: devexp
+
+  # The programming language of your repository.
+  # Usually Kotlin or TypeScript.
+  language: Markdown
+
+  # How you describe your repository.
+  # Usually the description of your repository.
+  description: |-
+    The README for the pleo-io organization.
+
+  # Any aliases you give your repository.
+  aliases: 
+    - github-pleo-io
+
+  # Any tags you would like to add to the service definition in OpsLevel.
+  tags:
+      # Which type of service the repository defines. 
+      #
+      # Use:
+      #  - `service` for web services (moons)
+      #  - `application` for downloadable software (such as an iOS/Android app,
+      #     CLI tool, standalone executable). This also includes e.g. web apps.
+      #  - `library` for software used by other components
+      #  - `configuration` for repos that contain pure configuration (such as
+      #    setup of danger or renovate).
+      #  - `hiring-challenge` for our hiring challenge
+
+    - key: type
+      value: configuration
