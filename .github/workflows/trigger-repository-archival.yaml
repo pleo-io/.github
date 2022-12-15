@@ -19,7 +19,7 @@ jobs:
     name: Trigger Unowned Repository Scan
     runs-on: [self-hosted, universal]
     steps:
-      - name: Checkout code
+      - name: Send workflow_dispatch event to GitHub
         uses: actions/github-script@v6
         with:
           script: |
