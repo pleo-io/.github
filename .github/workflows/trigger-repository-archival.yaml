@@ -30,9 +30,9 @@ jobs:
             }
 
             const endpoint = `/repos/${owner}/${repository}/dispatches`
-            console.info(`Dispatching workflow_dispatch event to '${endpoint}'`)
+            console.info(`Dispatching 'workflow_dispatch' event to '${endpoint}'`)
 
-            const dryRunInput = ${{ github.event.inputs.flutter_version }}
+            const dryRunInput = ${{ github.event.inputs.dry-run }}
             // Dry-run if the input is not present or set to true. Otherwise disable dry-run.
             const shouldDryRun = dryRunInput === undefined || dryRunInput === '' ? true : dryRunInput === 'true'
 
