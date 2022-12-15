@@ -1,0 +1,36 @@
+name: Trigger Unowned Repository Scan
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Whether to dry-run archival
+        required: true
+        default: "true"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    name: Trigger Unowned Repository Scan
+    runs-on: [self-hosted, universal]
+    steps:
+      - name: Determine whether to dry-run
+        id: should-dry-run
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const shouldDryRun = ${{ github.event.inputs.dry-run }} !== 'false'
+            core.info(`Dry-run: ${shouldDryRun}`)
+            return shouldDryRun
+
+      - name: Send repository dispatch event
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: trigger-archival
+          client-payload: '{ "dry-run": ${{ steps.should-dry-run.outputs.result }} }'
