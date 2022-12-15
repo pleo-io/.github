@@ -1,0 +1,46 @@
+name: Trigger Unowned Repository Scan
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Whether to dry-run archival
+        required: true
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  trigger:
+    name: Trigger Unowned Repository Scan
+    runs-on: [self-hosted, universal]
+    steps:
+      - name: Checkout code
+        uses: actions/github-script@v3
+        with:
+          script: |
+            const [owner, repository] = '${{ github.repository }}'.split("/")
+            if (!owner || !repository) {
+              console.error('No owner or repository was found in the runner context - exiting.')
+              process.exit(1)
+            }
+
+            const endpoint = `/repos/${owner}/${repository}/dispatches`
+            console.info(`Dispatching workflow_dispatch event to '${endpoint}'`)
+
+            const dryRunInput = ${{ github.event.inputs.flutter_version }}
+            // Dry-run if the input is not present or set to true. Otherwise disable dry-run.
+            const shouldDryRun = dryRunInput === undefined || dryRunInput === '' ? true : dryRunInput === true
+
+            await octokit.request(`POST ${endpoint}`, {
+              owner: owner,
+              repo: repository,
+              event_type: 'trigger-archival',
+              client_payload: {
+                'dry-run': shouldDryRun
+              }
+            })
