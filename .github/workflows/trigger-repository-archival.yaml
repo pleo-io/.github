@@ -19,28 +19,18 @@ jobs:
     name: Trigger Unowned Repository Scan
     runs-on: [self-hosted, universal]
     steps:
-      - name: Send repository_dispatch event to GitHub
+      - name: Determine whether to dry-run
+        id: should-dry-run
         uses: actions/github-script@v6
         with:
+          result-encoding: string
           script: |
-            const [owner, repository] = '${{ github.repository }}'.split("/")
-            if (!owner || !repository) {
-              core.error('No owner or repository was found in the runner context - exiting.')
-              process.exit(1)
-            }
+            const shouldDryRun = ${{ github.event.inputs.dry-run }} !== 'false'
+            core.info(`Dry-run: ${shouldDryRun}`)
+            return shouldDryRun
 
-            const endpoint = `/repos/${owner}/${repository}/dispatches`
-            core.info(`Dispatching 'repository_dispatch' event to '${endpoint}'`)
-
-            const dryRunInput = ${{ github.event.inputs.dry-run }}
-
-            const response = await octokit.request(`POST ${endpoint}`, {
-              owner: owner,
-              repo: repository,
-              event_type: 'trigger-archival',
-              client_payload: {
-                'dry-run': dryRunInput !== 'false'
-              }
-            })
-
-            core.info(response)
+      - name: Send repository dispatch event
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: trigger-archival
+          client-payload: '{ "dry-run": ${{ steps.should-dry-run.outputs.result }} }'
