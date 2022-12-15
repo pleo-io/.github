@@ -34,7 +34,7 @@ jobs:
 
             const dryRunInput = ${{ github.event.inputs.dry-run }}
             // Dry-run if the input is not present or set to 'true'. Otherwise disable dry-run.
-            const shouldDryRun = dryRunInput === undefined || dryRunInput === '' ? true : dryRunInput === 'true'
+            const shouldDryRun = dryRunInput !== 'false'
 
             const response = await octokit.request(`POST ${endpoint}`, {
               owner: owner,
