@@ -20,7 +20,7 @@ jobs:
     runs-on: [self-hosted, universal]
     steps:
       - name: Checkout code
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           script: |
             const [owner, repository] = '${{ github.repository }}'.split("/")
