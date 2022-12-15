@@ -8,7 +8,7 @@ on:
       dry-run:
         description: Whether to dry-run archival
         required: true
-        default: true
+        default: "true"
 
 concurrency:
   group: ${{ github.workflow }}
@@ -34,7 +34,7 @@ jobs:
 
             const dryRunInput = ${{ github.event.inputs.flutter_version }}
             // Dry-run if the input is not present or set to true. Otherwise disable dry-run.
-            const shouldDryRun = dryRunInput === undefined || dryRunInput === '' ? true : dryRunInput === true
+            const shouldDryRun = dryRunInput === undefined || dryRunInput === '' ? true : dryRunInput === 'true'
 
             await octokit.request(`POST ${endpoint}`, {
               owner: owner,
