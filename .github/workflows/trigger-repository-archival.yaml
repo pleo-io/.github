@@ -25,18 +25,18 @@ jobs:
           script: |
             const [owner, repository] = '${{ github.repository }}'.split("/")
             if (!owner || !repository) {
-              console.error('No owner or repository was found in the runner context - exiting.')
+              core.error('No owner or repository was found in the runner context - exiting.')
               process.exit(1)
             }
 
             const endpoint = `/repos/${owner}/${repository}/dispatches`
-            console.info(`Dispatching 'repository_dispatch' event to '${endpoint}'`)
+            core.info(`Dispatching 'repository_dispatch' event to '${endpoint}'`)
 
             const dryRunInput = ${{ github.event.inputs.dry-run }}
             // Dry-run if the input is not present or set to 'true'. Otherwise disable dry-run.
             const shouldDryRun = dryRunInput === undefined || dryRunInput === '' ? true : dryRunInput === 'true'
 
-            await octokit.request(`POST ${endpoint}`, {
+            const response = await octokit.request(`POST ${endpoint}`, {
               owner: owner,
               repo: repository,
               event_type: 'trigger-archival',
@@ -44,3 +44,5 @@ jobs:
                 'dry-run': shouldDryRun
               }
             })
+
+            core.info(response)
