@@ -19,7 +19,7 @@ jobs:
     name: Trigger Unowned Repository Scan
     runs-on: [self-hosted, universal]
     steps:
-      - name: Send workflow_dispatch event to GitHub
+      - name: Send repository_dispatch event to GitHub
         uses: actions/github-script@v6
         with:
           script: |
@@ -30,7 +30,7 @@ jobs:
             }
 
             const endpoint = `/repos/${owner}/${repository}/dispatches`
-            console.info(`Dispatching 'workflow_dispatch' event to '${endpoint}'`)
+            console.info(`Dispatching 'repository_dispatch' event to '${endpoint}'`)
 
             const dryRunInput = ${{ github.event.inputs.dry-run }}
             // Dry-run if the input is not present or set to 'true'. Otherwise disable dry-run.
