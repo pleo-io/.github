@@ -33,4 +33,4 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           event-type: trigger-archival
-          client-payload: '{ "dry-run": ${{ steps.should-dry-run.outputs.result }} }'
+          client-payload: '{ "dry-run": "${{ steps.should-dry-run.outputs.result }}" }'
