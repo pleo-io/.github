@@ -25,7 +25,8 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const shouldDryRun = ${{ github.event.inputs.dry-run }} !== 'false'
+            core.info(`Dry-run input: ${shouldDryRun}`)
+            const shouldDryRun = '${{ github.event.inputs.dry-run }}' !== 'false'
             core.info(`Dry-run: ${shouldDryRun}`)
             return shouldDryRun
 
