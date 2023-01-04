@@ -7,8 +7,9 @@ on:
     inputs:
       dry-run:
         description: Whether to dry-run archival
+        type: boolean
         required: true
-        default: "true"
+        default: true
 
 concurrency:
   group: ${{ github.workflow }}
