@@ -3,14 +3,6 @@ name: Trigger Unowned Repository Scan
 on:
   schedule:
     - cron: "0 9 * * 1-5"
-  workflow_dispatch:
-    inputs:
-      dry-run:
-        description: Whether to dry-run archival
-        type: boolean
-        required: true
-        default: true
-
 
 concurrency:
   group: ${{ github.workflow }}
@@ -24,12 +16,8 @@ jobs:
     name: Trigger Unowned Repository Scan
     runs-on: ubuntu-latest
     steps:
-      - name: Set dry run for manual dispatch
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: echo "dry_run=${{ github.event.inputs.dry-run }}" >> $GITHUB_ENV
-
       - name: Send repository dispatch event
         uses: peter-evans/repository-dispatch@v2
         with:
-          event-type: trigger-archival-test
+          event-type: trigger-archival
           client-payload: '{ "dry-run": ${{ env.dry_run }} }'
