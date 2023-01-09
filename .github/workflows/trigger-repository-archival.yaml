@@ -8,6 +8,9 @@ on:
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
+  
+env:
+  dry_run: false
 
 jobs:
   trigger:
@@ -16,8 +19,6 @@ jobs:
     steps:
       - name: Send repository dispatch event
         uses: peter-evans/repository-dispatch@v2
-        env:
-          SHOULD_DRY_RUN: ${{ secrets.SHOULD_DRY_RUN || true }}
         with:
           event-type: trigger-archival-test
-          client-payload: '{ "dry-run": ${{ env.SHOULD_DRY_RUN }} }'
+          client-payload: '{ "dry-run": ${{ env.dry_run }} }'
