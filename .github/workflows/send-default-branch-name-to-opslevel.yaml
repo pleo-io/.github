@@ -34,7 +34,8 @@ jobs:
             core.info('Fetched repositories:')
             core.info(names.join(',\n'))
 
-            return repositories
+            const mapped = repositories.map(r => ({ repository: r.name, defaultBranch: r.default_branch }))
+            return mapped
 
   send-to-opslevel:
     name: Send repository data to OpsLevel
@@ -48,4 +49,4 @@ jobs:
       - name: POST default branch name to OpsLevel
         if: github.event.action != 'push'
         run: |
-          echo '{ "repository": "${{ matrix.repository.name }}", "defaultBranch": "${{ matrix.repository.default_branch }}" }' | curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 -X POST https://app.opslevel.com/integrations/custom_event/4e9ed0d8-b835-47ab-948f-628e04448ce8 -H 'content-type: application/json' --data-binary @-
+          echo '{ "repository": "${{ matrix.repository.repository }}", "defaultBranch": "${{ matrix.repository.defaultBranch }}" }' | curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 -X POST https://app.opslevel.com/integrations/custom_event/4e9ed0d8-b835-47ab-948f-628e04448ce8 -H 'content-type: application/json' --data-binary @-
