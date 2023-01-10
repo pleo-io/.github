@@ -18,9 +18,18 @@ jobs:
       repositories: ${{ steps.fetch-all-repositories.outputs.result }}
 
     steps:
+      - name: Allow pushing version updates to the default branch
+        id: get-admin-token
+        uses: peter-murray/workflow-application-token-action@v2
+        with:
+          application_id: ${{ secrets.PLEO_GH_APP_TOKEN_SIGNER_APP_ID }}
+          application_private_key: ${{ secrets.PLEO_GH_APP_TOKEN_SIGNER_PRIVATE_KEY }}
+
       - name: Get all repositories
         uses: actions/github-script@v6
         id: fetch-all-repositories
+        env:
+          GITHUB_TOKEN: ${{ steps.get-admin-token.outputs.token }}
         with:
           script: |
             const repositories = await github.paginate("GET /orgs/pleo-io/repos?type=all", {
@@ -35,8 +44,8 @@ jobs:
 
             return repositories
 
-  post-opslevel:
-    name: Fetch repositories from GitHub
+  send-to-opslevel:
+    name: Send repository data to OpsLevel
     runs-on: ubuntu-latest
     needs: get-github-repositories
     strategy:
