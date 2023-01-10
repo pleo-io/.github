@@ -24,7 +24,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const repositories = await github.paginate("GET /repos/pleo-io/repos", {
+            const repositories = await github.paginate("GET /orgs/pleo-io/repos", {
               per_page: 100,
               headers: {
                 "X-GitHub-Api-Version": "2022-11-28",
