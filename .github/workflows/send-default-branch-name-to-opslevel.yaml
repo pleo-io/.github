@@ -29,9 +29,6 @@ jobs:
                 "X-GitHub-Api-Version": "2022-11-28",
               },
             })
-            const names = repositories.map(r => r.name)
-            core.info('Fetched repositories:')
-            core.info(names.join(',\n'))
 
             const mapped = repositories.filter(r => !r.archived).map(r => ({ repository: r.name, defaultBranch: r.default_branch }))
             return mapped
