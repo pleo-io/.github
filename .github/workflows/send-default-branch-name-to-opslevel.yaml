@@ -2,9 +2,8 @@ name: Send default branch name to OpsLevel
 
 on:
   schedule:
-    - cron: "0 9,16 * * *"
+    - cron: "0 9,12,16 * * *"
   workflow_dispatch:
-  push:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -47,6 +46,5 @@ jobs:
 
     steps:
       - name: POST default branch name to OpsLevel
-        if: github.event.action != 'push'
         run: |
           echo '{ "repository": "${{ matrix.repository.repository }}", "defaultBranch": "${{ matrix.repository.defaultBranch }}" }' | curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 -X POST https://app.opslevel.com/integrations/custom_event/4e9ed0d8-b835-47ab-948f-628e04448ce8 -H 'content-type: application/json' --data-binary @-
