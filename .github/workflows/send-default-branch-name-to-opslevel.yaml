@@ -42,7 +42,7 @@ jobs:
     needs: get-github-repositories
     strategy:
       matrix:
-        repository: fromJSON('${{ needs.get-github-repositories.outputs.repositories }}')
+        repository: fromJSON(${{ needs.get-github-repositories.outputs.repositories }})
 
     steps:
       - name: POST default branch name to OpsLevel
