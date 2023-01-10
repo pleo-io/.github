@@ -1,0 +1,48 @@
+name: Send default branch name to OpsLevel
+
+on:
+  schedule:
+    - cron: "0 9,16 * * *"
+  workflow_dispatch:
+  push:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  get-github-repositories:
+    name: Fetch repositories from GitHub
+    runs-on: ubuntu-latest
+    outputs:
+      repositories: ${{ steps.fetch-all-repositories.outputs.result }}
+
+    steps:
+      - name: Get all repositories
+        uses: actions/github-script@v6
+        id: fetch-all-repositories
+        with:
+          result-encoding: string
+          script: |
+            const repositories = await github.paginate("GET /repos/pleo-io/repos", {
+              per_page: 100,
+              headers: {
+                "X-GitHub-Api-Version": "2022-11-28",
+              },
+            })
+
+            return JSON.stringify(repositories)
+
+  post-opslevel:
+    name: Fetch repositories from GitHub
+    runs-on: ubuntu-latest
+    needs: get-github-repositories
+    strategy:
+      matrix:
+        repository: fromJSON(${{ needs.outputs.repositories }})
+
+    steps:
+      - name: POST default branch name to OpsLevel
+        if: github.event.event_name != 'push'
+        run: |
+          echo '{ "repository": "${{ matrix.repository.name }}", "defaultBranch": "${{ matrix.repository.default_branch }}" }' | curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 -X POST https://app.opslevel.com/integrations/custom_event/4e9ed0d8-b835-47ab-948f-628e04448ce8 -H 'content-type: application/json' --data-binary @-
