@@ -32,7 +32,7 @@ jobs:
 
             const withBranchProtection = repositories.map(r => {
               const {owner, repo, default_branch} = r
-              const { required_pull_request_reviews: { required_approving_review_count: count } } = repos.getBranchProtection({
+              const { required_pull_request_reviews: { required_approving_review_count: count } } = github.rest.repos.getBranchProtection({
                 owner,
                 repo,
                 branch: default_branch,
