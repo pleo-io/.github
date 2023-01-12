@@ -43,7 +43,7 @@ jobs:
                 const count = required_pull_request_reviews?.required_approving_review_count ?? 0
                 return { ...r, branchProtectionApprovals: count }
               } catch (e) {
-                core.info(`Could not fetch branch protections for pleo-io/${name}`)
+                core.warning(`Could not fetch branch protections for pleo-io/${name}`)
                 return { ...r, branchProtectionApprovals: 0 }
               }
             }))
