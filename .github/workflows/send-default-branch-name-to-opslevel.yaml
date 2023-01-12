@@ -31,11 +31,11 @@ jobs:
             })).filter(r => !r.archived)
 
             const withBranchProtection = repositories.map(r => {
-              const {owner, repo, default_branch} = r
+              const {owner: { login }, name, default_branch} = r
               core.info(`Fetching branch protections for ${owner}/${repo}`)
               const { required_pull_request_reviews } = github.rest.repos.getBranchProtection({
-                owner,
-                repo,
+                owner: login,
+                repo: name,
                 branch: default_branch,
               })
               const count = required_pull_request_reviews?.required_approving_review_count ?? 0
