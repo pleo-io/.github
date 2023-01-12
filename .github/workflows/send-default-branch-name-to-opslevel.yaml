@@ -30,7 +30,18 @@ jobs:
               },
             })
 
-            const mapped = repositories.filter(r => !r.archived).map(r => ({ repository: r.name, defaultBranch: r.default_branch }))
+            const withBranchProtection = repositories.map(r => {
+              const {owner, repo, default_branch} = r
+              const { required_pull_request_reviews: { required_approving_review_count: count } } = repos.getBranchProtection({
+                owner,
+                repo,
+                branch: default_branch,
+              })
+
+              return { ...r, branchProtectionApprovals: count }
+            })
+
+            const mapped = withBranchProtection.filter(r => !r.archived).map(r => ({ repository: r.name, defaultBranch: r.default_branch, branchProtectionApprovals: r.branchProtectionApprovals }))
             return mapped
 
   send-to-opslevel:
@@ -44,4 +55,4 @@ jobs:
     steps:
       - name: POST default branch name to OpsLevel
         run: |
-          echo '{ "repository": "${{ matrix.repository.repository }}", "defaultBranch": "${{ matrix.repository.defaultBranch }}" }' | curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 -X POST https://app.opslevel.com/integrations/custom_event/${{ secrets.OPSLEVEL_CUSTOM_EVENT_WEBHOOK }} -H 'content-type: application/json' --data-binary @-
+          echo '{ "repository": "${{ matrix.repository.repository }}", "defaultBranch": "${{ matrix.repository.defaultBranch }}", "branchProtectionApprovals": "${{ matrix.repository.branchProtectionApprovals }}" }' | curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-time 40 -X POST https://app.opslevel.com/integrations/custom_event/${{ secrets.OPSLEVEL_CUSTOM_EVENT_WEBHOOK }} -H 'content-type: application/json' --data-binary @-
