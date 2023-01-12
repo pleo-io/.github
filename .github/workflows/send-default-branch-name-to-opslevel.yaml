@@ -33,14 +33,19 @@ jobs:
             const withBranchProtection = repositories.map(r => {
               const { name, default_branch } = r
               core.info(`Fetching branch protections for pleo-io/${name}`)
-              const { required_pull_request_reviews } = github.rest.repos.getBranchProtection({
-                owner: 'pleo-io',
-                repo: name,
-                branch: default_branch,
-              })
-              const count = required_pull_request_reviews?.required_approving_review_count ?? 0
 
-              return { ...r, branchProtectionApprovals: count }
+              try {
+                const { required_pull_request_reviews } = github.rest.repos.getBranchProtection({
+                  owner: 'pleo-io',
+                  repo: name,
+                  branch: default_branch,
+                })
+                const count = required_pull_request_reviews?.required_approving_review_count ?? 0
+                return { ...r, branchProtectionApprovals: count }
+              } catch (e) {
+                core.info(`Could not fetch branch protections for pleo-io/${name}`)
+                return { ...r, branchProtectionApprovals: 0 }
+              }
             })
 
             const mapped = withBranchProtection.map(r => ({ repository: r.name, defaultBranch: r.default_branch, branchProtectionApprovals: r.branchProtectionApprovals }))
