@@ -32,7 +32,7 @@ jobs:
 
             const withBranchProtection = repositories.map(r => {
               const { name, default_branch } = r
-              core.info(`Fetching branch protections for pleo-io/${repo}`)
+              core.info(`Fetching branch protections for pleo-io/${name}`)
               const { required_pull_request_reviews } = github.rest.repos.getBranchProtection({
                 owner: 'pleo-io',
                 repo: name,
