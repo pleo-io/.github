@@ -41,7 +41,7 @@ jobs:
               return { ...r, branchProtectionApprovals: count }
             })
 
-            const mapped = withBranchProtection.filter(r => !r.archived).map(r => ({ repository: r.name, defaultBranch: r.default_branch }))
+            const mapped = withBranchProtection.filter(r => !r.archived).map(r => ({ repository: r.name, defaultBranch: r.default_branch, r.branchProtectionApprovals: r.branchProtectionApprovals }))
             return mapped
 
   send-to-opslevel:
