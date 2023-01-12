@@ -35,7 +35,7 @@ jobs:
               core.info(`Fetching branch protections for pleo-io/${name}`)
 
               try {
-                const { required_pull_request_reviews } = github.rest.repos.getBranchProtection({
+                const { required_pull_request_reviews } = await github.rest.repos.getBranchProtection({
                   owner: 'pleo-io',
                   repo: name,
                   branch: default_branch,
