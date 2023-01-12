@@ -30,7 +30,7 @@ jobs:
               },
             })).filter(r => !r.archived)
 
-            const withBranchProtection = repositories.map(r => {
+            const withBranchProtection = Promise.all(repositories.map(async (r) => {
               const { name, default_branch } = r
               core.info(`Fetching branch protections for pleo-io/${name}`)
 
@@ -46,7 +46,7 @@ jobs:
                 core.info(`Could not fetch branch protections for pleo-io/${name}`)
                 return { ...r, branchProtectionApprovals: 0 }
               }
-            })
+            }))
 
             const mapped = withBranchProtection.map(r => ({ repository: r.name, defaultBranch: r.default_branch, branchProtectionApprovals: r.branchProtectionApprovals }))
             return mapped
