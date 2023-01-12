@@ -31,10 +31,10 @@ jobs:
             })).filter(r => !r.archived)
 
             const withBranchProtection = repositories.map(r => {
-              const {owner: { login }, name, default_branch} = r
-              core.info(`Fetching branch protections for ${owner}/${repo}`)
+              const { name, default_branch } = r
+              core.info(`Fetching branch protections for pleo-io/${repo}`)
               const { required_pull_request_reviews } = github.rest.repos.getBranchProtection({
-                owner: login,
+                owner: 'pleo-io',
                 repo: name,
                 branch: default_branch,
               })
