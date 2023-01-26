@@ -14,10 +14,10 @@ jobs:
     name: Trigger Opslevel default branch name check
     runs-on: ubuntu-latest
     steps:
-    - name: Trigger OpsLevel default branch name check
-      id: opslevel-default-branch-name-check
-      uses: pleo-io/opslevel-default-branch-check@main
-      with:
-        opsLevelApiToken: ${{ secrets.OPSLEVEL_API_TOKEN }}
-        opsLevelCustomEventSecret: ${{ secrets.OPSLEVEL_CUSTOM_EVENT_SECRET }}
-        defaultBranch: main
+      - name: Trigger check
+        id: opslevel-default-branch-name-check
+        uses: pleo-io/opslevel-default-branch-check@main
+        with:
+          opsLevelApiToken: ${{ secrets.OPSLEVEL_API_TOKEN }}
+          opsLevelCustomEventSecret: ${{ secrets.OPSLEVEL_CUSTOM_EVENT_SECRET }}
+          defaultBranch: main
