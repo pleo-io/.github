@@ -18,6 +18,6 @@ jobs:
         id: opslevel-default-branch-name-check
         uses: pleo-io/opslevel-default-branch-check@main
         with:
-          opsLevelApiToken: ${{ secrets.OPSLEVEL_API_TOKEN }}
-          opsLevelCustomEventSecret: ${{ secrets.OPSLEVEL_CUSTOM_EVENT_SECRET }}
+          opslevelApiToken: ${{ secrets.OPSLEVEL_API_TOKEN }}
+          opslevelCustomEventSecret: ${{ secrets.OPSLEVEL_CUSTOM_EVENT_SECRET }}
           defaultBranch: main
