@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Trigger check
         id: opslevel-default-branch-name-check
-        uses: pleo-io/opslevel-default-branch-check@main
+        uses: pleo-io/opslevel-default-branch-name-check@main
         with:
           opslevelApiToken: ${{ secrets.OPSLEVEL_API_TOKEN }}
           opslevelCustomEventSecret: ${{ secrets.OPSLEVEL_CUSTOM_EVENT_SECRET }}
