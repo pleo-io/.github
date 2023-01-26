@@ -10,14 +10,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  get-github-repositories:
-    name: Fetch repositories from GitHub
+  trigger-opslevel-default-branch-name-check:
+    name: Trigger Opslevel default branch name check
     runs-on: ubuntu-latest
-    outputs:
-      repositories: ${{ steps.fetch-all-repositories.outputs.result }}
-
     steps:
-    - name: Run OpsLevel default branch name check
+    - name: Trigger OpsLevel default branch name check
       id: opslevel-default-branch-name-check
       uses: pleo-io/opslevel-default-branch-check@main
       with:
