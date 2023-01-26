@@ -1,0 +1,26 @@
+name: Send default branch name to OpsLevel
+
+on:
+  schedule:
+    - cron: "0 9,12,16 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  get-github-repositories:
+    name: Fetch repositories from GitHub
+    runs-on: ubuntu-latest
+    outputs:
+      repositories: ${{ steps.fetch-all-repositories.outputs.result }}
+
+    steps:
+    - name: Run OpsLevel default branch name check
+      id: opslevel-default-branch-name-check
+      uses: pleo-io/opslevel-default-branch-check@main
+      with:
+        opsLevelApiToken: ${{ secrets.OPSLEVEL_API_TOKEN }}
+        opsLevelCustomEventSecret: ${{ secrets.OPSLEVEL_CUSTOM_EVENT_SECRET }}
+        defaultBranch: main
