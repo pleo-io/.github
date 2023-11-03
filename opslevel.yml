@@ -42,4 +42,4 @@ service:
       #  - `hiring-challenge` for our hiring challenge
 
     - key: type
-      value: configuration
+      value: documentation
