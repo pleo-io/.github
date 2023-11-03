@@ -4,7 +4,7 @@ version: 1
 service:
 
   # The name of your repository.
-  name: Github Configuration (pleo-io)
+  name: GitHub Org Documentation (pleo-io)
 
   # The state of the code within the repository.
   lifecycle: generally_available
@@ -22,7 +22,7 @@ service:
   # How you describe your repository.
   # Usually the description of your repository.
   description: |-
-    The README for the pleo-io organization.
+    The README for the pleo-io organization in GitHub.
 
   # Any aliases you give your repository.
   aliases: 
@@ -38,8 +38,9 @@ service:
       #     CLI tool, standalone executable). This also includes e.g. web apps.
       #  - `library` for software used by other components
       #  - `configuration` for repos that contain pure configuration (such as
-      #    setup of danger or renovate).
-      #  - `hiring-challenge` for our hiring challenge
+      #    setup of DangerJS or Renovate).
+      #  - `documentation` for repos that mostly contain documentation.
+      #  - `hiring-challenge` for our hiring challenges.
 
     - key: type
-      value: configuration
+      value: documentation
